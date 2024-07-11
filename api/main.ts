@@ -5,6 +5,13 @@ function doGet() {
     return response;
 }
 
+interface Word {
+    word: string;
+    meaning: string;
+    root: string;
+    english: string;
+}
+
 function getData() {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getSheetByName('2学期中間');
@@ -13,15 +20,20 @@ function getData() {
     }
 
     let row = 1;
-    const combinedArray = [];
+    const combinedArray :Word[] = [];
     while (true) {
         const range = sheet.getRange(`A${row}:D${row}`);
         const values = range.getValues();
         if (values[0].every(value => value === "")) {
             break;
         }
-        combinedArray.push(values[0]); // ここを変更して、値をそのまま追加
-        row++;
+        const word: Word = {
+            word: values[0][0],
+            meaning: values[0][1],
+            root: values[0][2],
+            english: values[0][3]
+        };
+        combinedArray.push(word);
     }
     return combinedArray;
 }
